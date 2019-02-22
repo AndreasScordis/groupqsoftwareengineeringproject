@@ -1,0 +1,576 @@
+
+//Written By Andreas Scordis
+//For Group Software Project ECM2434
+
+import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+
+public class Play extends JPanel {
+    
+    private static final int SCREEN_WIDTH = 800;
+    private static final int SCREEN_HEIGHT = 600;
+    
+    private GradientPaint gradientPaint;
+    private BufferedImage iconImage;
+    private BufferedImage backgroundImage;
+    private double testY;
+    
+    public Play() {
+        Point2D pa = new Point2D.Double(0, 100);
+        Point2D pb = new Point2D.Double(0, 400);
+        Color ca = Color.BLACK;
+        Color cb = new Color(0, 0, 0, 0);
+        gradientPaint = new GradientPaint(pa, ca, pb, cb);
+        try {
+            iconImage = ImageIO.read(getClass().getResourceAsStream("Icons.png"));
+            backgroundImage = ImageIO.read(getClass().getResourceAsStream("GuitarBackground.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(Play.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(-1);
+        }
+    }
+    
+    public void start() {
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                update();
+                repaint();
+            }
+        }, 100, 1000 / 60);
+    }
+    
+    private void update() {
+        testY += 1;
+    }
+    
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0, null);
+        Graphics2D g2d = (Graphics2D) g;
+        drawNotes(g2d);
+        makeDeeperIconsDarker(g2d);
+    }
+    
+    private final double x = SCREEN_HEIGHT / Math.sqrt(2);
+    private final double theta = Math.toRadians(45);
+    private final double sinTheta = Math.sin(theta);
+    private final double cosTheta = Math.cos(theta);
+    
+    private void drawNotes(Graphics2D g) {
+        double horizontalNarrowing = 0;
+        for (int screenY = 0; screenY < 500; screenY++) {
+            double tanAlpha = (screenY * sinTheta) / (x - screenY * cosTheta);
+            int textureY = (int) (tanAlpha *100 + testY);
+            int dx1 = (int) (horizontalNarrowing - 100);
+            int dx2 = (int) (SCREEN_WIDTH + 100 - horizontalNarrowing);
+            g.drawImage(iconImage, dx1, 600 - screenY, dx2, 599 - screenY
+                    , 0, textureY, iconImage.getWidth()+100, textureY + 1, this);
+            horizontalNarrowing += 0.8;
+            
+        }
+    }
+    
+    private void makeDeeperIconsDarker(Graphics2D g) {
+        g.setPaint(gradientPaint);
+        g.fillRect(0, 0, 800, 400);
+        g.setPaint(Color.BLACK);
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                Play view = new Play();
+                JFrame frame = new JFrame();
+                frame.setTitle("Guitar Zero Live Play");
+                frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setLocationRelativeTo(null);
+                frame.getContentPane().add(view);
+                frame.setVisible(true);
+                view.start();
+            }
+        });
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+fewqijbefqwbi jfwebjiefwe;lfob;lqwjebg'qlwjrbvgq'wl;rjgvbqw'lerjfqbwe'lfb
+wdfuivobqwlefjqbwelkfjbqwelkjfb;lajdsf;lJABDF;LJBAUSBIABSIDNALSBDLUB;obakubs
+asidaksbdjabsdbibasldoounawiduhauwbd awdouabwldkbsidnbajashcoiwiefnhlasld
+asopububisdblooianv bhas vduoivooauuusubahsdiiyhbafjbvsod asodunaosubd a
+aiusbdiaubsdjlnyblaosucnjh sydoansibdubuoasjcn ubjs jsbyiaibibdubaosdh cjb
+
+*/
